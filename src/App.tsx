@@ -18,6 +18,7 @@ function App() {
       (async () => {
         const data = await getQRInfo(qrInfo);
         setProductInfo(data);
+        alert(data);
       })()
     }
   }, [qrInfo]);
@@ -32,6 +33,7 @@ function App() {
       {openQr && <QrReader setOpenQr={setOpenQr} setQrInfo={setQrInfo}/>}
       {!openQr && productInfo && <div>
         {productInfo}
+
       </div>}
     </div>
   );
