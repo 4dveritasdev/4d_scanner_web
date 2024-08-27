@@ -7,7 +7,7 @@ import "./QrStyles.css";
 import QrScanner from "qr-scanner";
 import QrFrame from "../assets/qr-frame.svg";
 
-const QrReader = () => {
+const QrReader = ({setOpenQr, setQrInfo}: any) => {
   // QR States
   const scanner = useRef<QrScanner>();
   const videoEl = useRef<HTMLVideoElement>(null);
@@ -24,6 +24,8 @@ const QrReader = () => {
     // ✅ Handle success.
     // 😎 You can do whatever you want with the scanned result.
     setScannedResult(result?.data);
+    setQrInfo(result?.data);
+    setOpenQr(false);
   };
 
   // Fail
