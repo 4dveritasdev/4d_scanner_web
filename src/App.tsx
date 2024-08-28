@@ -83,7 +83,7 @@ function App() {
     width: '100%',
     height: window.innerWidth * 0.7,
     playerVars: {
-      autoplay: 1,
+      autoplay: 0,
     },
   };
 
