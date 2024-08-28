@@ -96,7 +96,7 @@ function App() {
         <Typography sx={{ padding: 5, fontSize: 24}} >{productInfo.name}</Typography>
 
         <Box sx={{ position: 'relative' }}>
-          <Slide autoplay={false} onChange={(previous, next) => setCurrentIndex(next) }>
+          <Slide autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
             {productInfo.images.map((slideImage: any, index: number) => (
               <div key={index}>
                 <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
