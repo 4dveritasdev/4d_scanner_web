@@ -83,7 +83,7 @@ function App() {
     width: '100%',
     height: window.innerWidth * 0.7,
     playerVars: {
-      autoplay: 0,
+      autoplay: 1,
     },
   };
 
@@ -92,7 +92,7 @@ function App() {
       {!openQr && productInfo !== null && <Box>
         <Typography sx={{ padding: 5, fontSize: 24}} >{productInfo.name}</Typography>
 
-        <Slide>
+        <Slide autoplay={false}>
           {productInfo.images.map((slideImage: any, index: number) => (
             <div key={index}>
               <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
