@@ -39,6 +39,7 @@ function App() {
   const [productInfo, setProductInfo] = useState<any>(null);
   const [value, setValue] = useState(0);
 
+  // @ts-nocheck
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
