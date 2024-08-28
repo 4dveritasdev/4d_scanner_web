@@ -13,6 +13,8 @@ import Tab from '@mui/material/Tab';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css'
 import YouTube from 'react-youtube';
+import CameraIcon from './assets/camera_icon.png';
+import YoutubeIcon from './assets/youtube-icon.png';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -41,6 +43,7 @@ function App() {
   const [qrInfo, setQrInfo] = useState<string>('');
   const [productInfo, setProductInfo] = useState<any>(null);
   const [value, setValue] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // @ts-nocheck
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -92,18 +95,41 @@ function App() {
       {!openQr && productInfo !== null && <Box>
         <Typography sx={{ padding: 5, fontSize: 24}} >{productInfo.name}</Typography>
 
-        <Slide autoplay={false}>
-          {productInfo.images.map((slideImage: any, index: number) => (
-            <div key={index}>
-              <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
-            </div>
-          ))} 
-          {productInfo.videos.map((video: any) => (
-            <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)} opts={opts} />
-          ))}
-        </Slide>
+        <Box sx={{ position: 'relative' }}>
+          <Slide autoplay={false} onChange={(previous, next) => setCurrentIndex(next) }>
+            {productInfo.images.map((slideImage: any, index: number) => (
+              <div key={index}>
+                <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
+              </div>
+            ))} 
+            {productInfo.videos.map((video: any) => (
+              <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)} opts={opts} />
+            ))}
+          </Slide>
 
-        <Box sx={{ width: '100%' }}>
+          <Box sx={{ 
+              position: 'absolute',
+              bottom: 15,
+              paddingTop: 1,
+              paddingBottom: 1,
+              paddingLeft: 2,
+              paddingRight: 2,
+              right: 10,
+              borderRadius: 20,
+              backgroundColor: '#444',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <img src={currentIndex < productInfo.images.length ?  CameraIcon : YoutubeIcon} style={{height: 20, width: 20}} />
+            <Typography sx={{color: 'white', fontSize: 13, marginLeft: 1}}>
+              {currentIndex + 1}/{productInfo.images.length + productInfo.videos.length} Medias
+            </Typography>
+          </Box>
+        </Box>
+
+        <Box sx={{ width: '100%', pt: 2 }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
               <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48 }} label="DPP" {...a11yProps(0)} />
@@ -140,13 +166,13 @@ function App() {
         </Box>
       </Box>}
       
-      {/* {!openQr && <Button variant="contained" onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==')}>
-        Scan Product
-      </Button>} */}
-      
-      {!openQr && <Button variant="contained" onClick={() => setOpenQr(true)}>
+      {!openQr && <Button variant="contained" onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==')}>
         Scan Product
       </Button>}
+      
+      {/* {!openQr && <Button variant="contained" onClick={() => setOpenQr(true)}>
+        Scan Product
+      </Button>} */}
 
       {openQr && <QrReader setOpenQr={setOpenQr} setQrInfo={setQrInfo}/>}
     </Box>
