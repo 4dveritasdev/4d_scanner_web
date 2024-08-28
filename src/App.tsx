@@ -166,13 +166,13 @@ function App() {
         </Box>
       </Box>}
       
-      {!openQr && <Button variant="contained" onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==')}>
-        Scan Product
-      </Button>}
-      
-      {/* {!openQr && <Button variant="contained" onClick={() => setOpenQr(true)}>
+      {/* {!openQr && <Button variant="contained" onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==')}>
         Scan Product
       </Button>} */}
+      
+      {!openQr && <Button variant="contained" onClick={() => setOpenQr(true)}>
+        Scan Product
+      </Button>}
 
       {openQr && <QrReader setOpenQr={setOpenQr} setQrInfo={setQrInfo}/>}
     </Box>
