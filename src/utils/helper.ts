@@ -8,7 +8,7 @@ export const getQRInfo = async (data: any) => {
         console.log('requesting qr info', data);
         const res = await axios.post(`${API_URL}qrcode/decrypt`, { encryptData: data } );
         console.log("qrcode info:", res.data);
-        return res.data;
+        return res.data.data;
     } catch (err) {
         console.log('error', err);
         return null;
