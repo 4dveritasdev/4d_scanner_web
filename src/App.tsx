@@ -73,11 +73,18 @@ function App() {
     if(videoid != null) {
       console.log("video id = ",videoid[1]);
       return videoid[1];
-  } else {
-      console.log("The youtube url is not valid.");
-      return null;
+    } else {
+        console.log("The youtube url is not valid.");
+        return null;
+    }
   }
-  }
+
+  const opts = {
+    width: '100%',
+    playerVars: {
+      autoplay: 1,
+    },
+  };
 
   return (
     <Box sx={{ textAlign: 'center'}}>
@@ -91,7 +98,7 @@ function App() {
             </div>
           ))} 
           {productInfo.videos.map((video: any) => (
-            <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)}  />
+            <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)} opts={opts} />
           ))}
         </Slide>
 
