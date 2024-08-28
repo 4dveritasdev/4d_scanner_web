@@ -95,7 +95,7 @@ function App() {
         <Slide>
           {productInfo.images.map((slideImage: any, index: number) => (
             <div key={index}>
-              <img src={'https://shearnode.com/api/v1/files/' + slideImage} width="100%" />
+              <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
             </div>
           ))} 
           {productInfo.videos.map((video: any) => (
