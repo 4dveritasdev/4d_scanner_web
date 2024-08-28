@@ -10,6 +10,9 @@ import { getQRInfo } from "./utils/helper";
 import { Box, Button, Typography } from "@mui/material";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import { Slide } from 'react-slideshow-image';
+import 'react-slideshow-image/dist/styles.css'
+import YouTube from 'react-youtube';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -28,7 +31,7 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ p: 2 }}>{children}</Box>}
     </div>
   );
 }
@@ -64,18 +67,40 @@ function App() {
 
   console.log(productInfo);
 // qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==
+
+  const getYoutubeVideoIDFromUrl = (url: any): any => {
+    var videoid = url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
+    if(videoid != null) {
+      console.log("video id = ",videoid[1]);
+      return videoid[1];
+  } else {
+      console.log("The youtube url is not valid.");
+      return null;
+  }
+  }
+
   return (
     <Box sx={{ textAlign: 'center'}}>
       {!openQr && productInfo !== null && <Box>
-        <Typography sx={{ padding: 5}} >{productInfo.name}</Typography>
+        <Typography sx={{ padding: 5, fontSize: 24}} >{productInfo.name}</Typography>
 
+        <Slide>
+          {productInfo.images.map((slideImage: any, index: number) => (
+            <div key={index}>
+              <img src={'https://shearnode.com/api/v1/files/' + slideImage} width="100%" />
+            </div>
+          ))} 
+          {productInfo.videos.map((video: any, id: any) => (
+            <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)}  />
+          ))}
+        </Slide>
 
         <Box sx={{ width: '100%' }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-              <Tab sx={{ fontSize: 12, fontWeight: 'bold', minWidth: 48 }} label="DPP" {...a11yProps(0)} />
-              <Tab sx={{ fontSize: 12, fontWeight: 'bold', minWidth: 48}} label="Warranty/Guarantee" {...a11yProps(1)} />
-              <Tab sx={{ fontSize: 12, fontWeight: 'bold', minWidth: 48}} label="Manuals & Certs" {...a11yProps(2)} />
+              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48 }} label="DPP" {...a11yProps(0)} />
+              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48}} label="Warranty/Guarantee" {...a11yProps(1)} />
+              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48}} label="Manuals & Certs" {...a11yProps(2)} />
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
@@ -95,7 +120,7 @@ function App() {
               <Box style={{flex: 2}}>
                 <Typography style={{fontSize: 13, textAlign: 'left', whiteSpace: 'pre-line'}}>{productInfo.detail}</Typography>
               </Box>
-              <Box style={{flex: 1}}>
+              <Box style={{flex: 1, textAlign: 'right'}}>
                 <img src={productInfo.qrcode_img} style={{width: 100, height: 100}} />
               </Box>
             </Box>
@@ -107,7 +132,7 @@ function App() {
         </Box>
       </Box>}
       
-      {!openQr && <Button variant="contained" onClick={() => setOpenQr(true)}>
+      {!openQr && <Button variant="contained" onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==')}>
         Scan Product
       </Button>}
 
@@ -116,5 +141,6 @@ function App() {
   );
 }
 // onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==')}
+//  onClick={() => setOpenQr(true)}
 
 export default App;
