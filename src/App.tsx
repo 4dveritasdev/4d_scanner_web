@@ -90,7 +90,7 @@ function App() {
               <img src={'https://shearnode.com/api/v1/files/' + slideImage} width="100%" />
             </div>
           ))} 
-          {productInfo.videos.map((video: any, id: any) => (
+          {productInfo.videos.map((video: any) => (
             <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)}  />
           ))}
         </Slide>
@@ -132,7 +132,11 @@ function App() {
         </Box>
       </Box>}
       
-      {!openQr && <Button variant="contained" onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==')}>
+      {/* {!openQr && <Button variant="contained" onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==')}>
+        Scan Product
+      </Button>} */}
+      
+      {!openQr && <Button variant="contained" onClick={() => setOpenQr(true)}>
         Scan Product
       </Button>}
 
@@ -140,7 +144,5 @@ function App() {
     </Box>
   );
 }
-// onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==')}
-//  onClick={() => setOpenQr(true)}
 
 export default App;
