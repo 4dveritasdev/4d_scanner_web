@@ -100,7 +100,7 @@ function App() {
         backgroundPosition: 'center',
         minHeight: window.innerHeight,
       }}>
-      {!openQr && qrInfo !== '' && <Box sx={{ backgroundColor: 'black', color: 'white', minHeight: window.innerHeight}}>
+      {!openQr && productInfo !== null && <Box sx={{ backgroundColor: 'black', color: 'white', minHeight: window.innerHeight}}>
         
         <Box sx={{ textAlign: 'left'}}>
           <Button onClick={() => {setProductInfo(null), setQrInfo('')}} sx={{minWidth: 36, mt: 1}}>
@@ -199,7 +199,7 @@ function App() {
         </Button>}
       </Box>}
       
-      {!openQr && qrInfo === '' && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
+      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
         Scan Product
       </Button>}
 
@@ -211,7 +211,7 @@ function App() {
         Scan Product
       </Button>} */}
 
-      {openQr && <QrReader setOpenQr={setOpenQr} setQrInfo={setQrInfo}/>}
+      {openQr && productInfo === null && <QrReader setOpenQr={setOpenQr} setQrInfo={setQrInfo}/>}
     </Box>
   );
 }
