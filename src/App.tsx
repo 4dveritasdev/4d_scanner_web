@@ -103,7 +103,7 @@ function App() {
       {!openQr && productInfo !== null && <Box sx={{ backgroundColor: 'black', color: 'white', minHeight: window.innerHeight}}>
         
         <Box sx={{ textAlign: 'left'}}>
-          <Button onClick={() => {setProductInfo(null)}} sx={{minWidth: 36, mt: 1}}>
+          <Button onClick={() => {setProductInfo(null), setQrInfo('')}} sx={{minWidth: 36, mt: 1}}>
             <img src={BackButton} style={{height: 36, width: 36}} />
           </Button>
         </Box>
@@ -194,12 +194,12 @@ function App() {
           </Box>
         </Box>
         
-        {!openQr && <Button variant="outlined" sx={{minWidth: '40%', color: 'white', borderColor: 'white', m: 2}} onClick={() => setOpenQr(true)}>
+        {!openQr && <Button variant="outlined" sx={{minWidth: '40%', color: 'white', borderColor: 'white', m: 2}} onClick={() => {setOpenQr(true), setProductInfo(null)}}>
           Scan Product
         </Button>}
       </Box>}
       
-      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setOpenQr(true)}>
+      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null)}}>
         Scan Product
       </Button>}
 
