@@ -15,6 +15,8 @@ import 'react-slideshow-image/dist/styles.css'
 import YouTube from 'react-youtube';
 import CameraIcon from './assets/camera_icon.png';
 import YoutubeIcon from './assets/youtube-icon.png';
+import Background from './assets/bg.jpg';
+import BackButton from './assets/back.png';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -91,9 +93,22 @@ function App() {
   };
 
   return (
-    <Box sx={{ textAlign: 'center'}}>
-      {!openQr && productInfo !== null && <Box>
-        <Typography sx={{ padding: 5, fontSize: 24}} >{productInfo.name}</Typography>
+    <Box sx={{ 
+        textAlign: 'center',
+        backgroundImage: `url(${Background})`,
+        backgroundSize: "cover",
+        backgroundPosition: 'center',
+        minHeight: window.innerHeight,
+      }}>
+      {!openQr && productInfo !== null && <Box sx={{ backgroundColor: 'black', color: 'white', minHeight: window.innerHeight}}>
+        
+        <Box sx={{ textAlign: 'left'}}>
+          <Button onClick={() => {setProductInfo(null)}} sx={{minWidth: 36, mt: 1}}>
+            <img src={BackButton} style={{height: 36, width: 36}} />
+          </Button>
+        </Box>
+
+        <Typography sx={{ p: 5, pt: 2, fontSize: 24}} >{productInfo.name}</Typography>
 
         <Box sx={{ position: 'relative' }}>
           <Slide autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
@@ -129,15 +144,33 @@ function App() {
           </Box>
         </Box>
 
-        <Box sx={{ width: '100%', pt: 2 }}>
+        <Box sx={{ width: '100%', pt: 3 }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48 }} label="DPP" {...a11yProps(0)} />
-              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48}} label="Warranty/Guarantee" {...a11yProps(1)} />
-              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48}} label="Manuals & Certs" {...a11yProps(2)} />
+            <Tabs
+                value={value}
+                onChange={handleChange}
+                aria-label="basic tabs example"
+              >
+              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC' }} label="DPP" {...a11yProps(0)} />
+              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="Warranty/Guarantee" {...a11yProps(1)} />
+              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="Manuals & Certs" {...a11yProps(2)} />
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={2}>
+          </CustomTabPanel>
+
+          <Box sx={{
+            backgroundColor: 'white',
+            color: 'black',
+            p: 2,
+            m: 1,
+            mt: 0,
+            borderRadius: 5
+          }}>
             <Box sx={{display: 'flex', flexDirection: 'row'}}>
               <Box style={{flex: 1}}>
                 <Typography style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'left' }}>
@@ -158,21 +191,25 @@ function App() {
                 <img src={productInfo.qrcode_img} style={{width: 100, height: 100}} />
               </Box>
             </Box>
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
-          </CustomTabPanel>
+          </Box>
         </Box>
+        
+        {!openQr && <Button variant="outlined" sx={{minWidth: '40%', color: 'white', borderColor: 'white', m: 2}} onClick={() => setOpenQr(true)}>
+          Scan Product
+        </Button>}
       </Box>}
       
-      {/* {!openQr && <Button variant="contained" onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==')}>
+      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setOpenQr(true)}>
+        Scan Product
+      </Button>}
+
+      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==')}>
         Scan Product
       </Button>} */}
       
-      {!openQr && <Button variant="contained" onClick={() => setOpenQr(true)}>
+      {/* {!openQr && <Button variant="contained" sx={productInfo === null ? { position: 'absolute', bottom: 100 } : {}} onClick={() => setOpenQr(true)}>
         Scan Product
-      </Button>}
+      </Button>} */}
 
       {openQr && <QrReader setOpenQr={setOpenQr} setQrInfo={setQrInfo}/>}
     </Box>
