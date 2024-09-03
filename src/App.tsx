@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 // Components
 import QrReader from "./components/QrReader";
-import { getQRInfo } from "./utils/helper";
+import { CalculateRemainPeriod, getQRInfo } from "./utils/helper";
 import { Box, Button, Typography } from "@mui/material";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -157,41 +157,99 @@ function App() {
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
+            <Box sx={{
+              backgroundColor: 'white',
+              color: 'black',
+              p: 2,
+              m: 1,
+              mt: 0,
+              borderRadius: 5
+            }}>
+              <Box sx={{display: 'flex', flexDirection: 'row'}}>
+                <Box style={{flex: 1}}>
+                  <Typography style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'left' }}>
+                    {productInfo.model}
+                  </Typography>
+                </Box>
+                <Box style={{flex: 1}}>
+                  <Typography style={{fontSize: 13, textAlign: 'right'}}>Status : {productInfo.status}</Typography>
+                  <Typography style={{fontSize: 13, textAlign: 'right'}}>MPG Date : {productInfo.mpg_time}</Typography>
+                  <Typography style={{fontSize: 13, textAlign: 'right'}}>EXP Date : {productInfo.exp_time}</Typography>
+                </Box>
+              </Box>
+              <Box style={{paddingTop: 20, display: 'flex', flexDirection: 'row'}}>
+                <Box style={{flex: 2}}>
+                  <Typography style={{fontSize: 13, textAlign: 'left', whiteSpace: 'pre-line'}}>{productInfo.detail}</Typography>
+                </Box>
+                <Box style={{flex: 1, textAlign: 'right'}}>
+                  <img src={productInfo.qrcode_img} style={{width: 100, height: 100}} />
+                </Box>
+              </Box>
+            </Box>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
-          </CustomTabPanel>
-
-          <Box sx={{
-            backgroundColor: 'white',
-            color: 'black',
-            p: 2,
-            m: 1,
-            mt: 0,
-            borderRadius: 5
-          }}>
-            <Box sx={{display: 'flex', flexDirection: 'row'}}>
-              <Box style={{flex: 1}}>
-                <Typography style={{ fontSize: 15, fontWeight: 'bold', textAlign: 'left' }}>
-                  {productInfo.model}
+            <Box sx={{
+                backgroundColor: 'white',
+                color: 'black',
+                p: 2,
+                m: 1,
+                mt: 0,
+                borderRadius: 5
+              }}>
+              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Typography style={{ fontSize: 15, textAlign: 'center', width: 200 }}>
+                  The warranty for this product will expire in:
+                </Typography>
+                <Typography style={{ fontSize: 15, textAlign: 'center', width: 200, paddingTop: 10, color: (CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.warranty.period, productInfo.warrantyAndGuarantee.warranty.unit).duaration < 7 ? 'red' : 'black') }}>
+                  {CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.warranty.period, productInfo.warrantyAndGuarantee.warranty.unit).string}
+                  {/* {productInfo.warrantyAndGuarantee.warranty.period} {productInfo.warrantyAndGuarantee.warranty.unit == 0 ? 'Weeks' : 'Months'} */}
                 </Typography>
               </Box>
-              <Box style={{flex: 1}}>
-                <Typography style={{fontSize: 13, textAlign: 'right'}}>Status : {productInfo.status}</Typography>
-                <Typography style={{fontSize: 13, textAlign: 'right'}}>MPG Date : {productInfo.mpg_time}</Typography>
-                <Typography style={{fontSize: 13, textAlign: 'right'}}>EXP Date : {productInfo.exp_time}</Typography>
+              
+              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Typography style={{ fontSize: 15, textAlign: 'center', width: 220, paddingTop: 20 }}>
+                  The guarantee for this product will expire in:
+                </Typography>
+                <Typography style={{ fontSize: 15, textAlign: 'center', width: 200, paddingTop: 10, color: (CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.warranty.period, productInfo.warrantyAndGuarantee.warranty.unit).duaration < 7 ? 'red' : 'black') }}>
+                  {CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.guarantee.period, productInfo.warrantyAndGuarantee.guarantee.unit).string}
+                </Typography>
+              </Box>
+
+              
+              <Box style={{ display: 'flex', alignItems: 'center'}}>
+                <Typography style={{ fontSize: 15, textAlign: 'center', width: 220, paddingTop: 20 }}>
+                  Be sure to inspect for and report damage or fault before expiration
+                </Typography>
               </Box>
             </Box>
-            <Box style={{paddingTop: 20, display: 'flex', flexDirection: 'row'}}>
-              <Box style={{flex: 2}}>
-                <Typography style={{fontSize: 13, textAlign: 'left', whiteSpace: 'pre-line'}}>{productInfo.detail}</Typography>
-              </Box>
-              <Box style={{flex: 1, textAlign: 'right'}}>
-                <img src={productInfo.qrcode_img} style={{width: 100, height: 100}} />
-              </Box>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={2}>
+            <Box sx={{
+              backgroundColor: 'white',
+              color: 'black',
+              p: 2,
+              m: 1,
+              mt: 0,
+              borderRadius: 5
+            }}>
+              
+              <Typography style={{ fontSize: 15, fontWeight: 'bold' }}>
+                Public
+              </Typography>
+              
+              <Typography style={{ fontSize: 13, padding: 2 }}>
+                {productInfo.manualsAndCerts.public}
+              </Typography>
+              
+              <Typography style={{ fontSize: 15, fontWeight: 'bold' }}>
+                Private
+              </Typography>
+              
+              <Typography style={{ fontSize: 13, padding: 2 }}>
+                {productInfo.manualsAndCerts.private}
+              </Typography>
             </Box>
-          </Box>
+          </CustomTabPanel>
         </Box>
         
         {!openQr && <Button variant="outlined" sx={{minWidth: '40%', color: 'white', borderColor: 'white', m: 2}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
