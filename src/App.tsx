@@ -196,7 +196,6 @@ function App() {
                 mt: 0,
                 borderRadius: 5
               }}>
-              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                 <Typography style={{ fontSize: 15, textAlign: 'center', width: 200 }}>
                   The warranty for this product will expire in:
                 </Typography>
@@ -204,23 +203,18 @@ function App() {
                   {CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.warranty.period, productInfo.warrantyAndGuarantee.warranty.unit).string}
                   {/* {productInfo.warrantyAndGuarantee.warranty.period} {productInfo.warrantyAndGuarantee.warranty.unit == 0 ? 'Weeks' : 'Months'} */}
                 </Typography>
-              </Box>
               
-              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                 <Typography style={{ fontSize: 15, textAlign: 'center', width: 220, paddingTop: 20 }}>
                   The guarantee for this product will expire in:
                 </Typography>
                 <Typography style={{ fontSize: 15, textAlign: 'center', width: 200, paddingTop: 10, color: (CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.warranty.period, productInfo.warrantyAndGuarantee.warranty.unit).duaration < 7 ? 'red' : 'black') }}>
                   {CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.guarantee.period, productInfo.warrantyAndGuarantee.guarantee.unit).string}
                 </Typography>
-              </Box>
 
-              
-              <Box style={{ display: 'flex', alignItems: 'center'}}>
+                
                 <Typography style={{ fontSize: 15, textAlign: 'center', width: 220, paddingTop: 20 }}>
                   Be sure to inspect for and report damage or fault before expiration
                 </Typography>
-              </Box>
             </Box>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
@@ -230,14 +224,15 @@ function App() {
               p: 2,
               m: 1,
               mt: 0,
-              borderRadius: 5
+              borderRadius: 5,
+              textAlign: 'left'
             }}>
               
               <Typography style={{ fontSize: 15, fontWeight: 'bold' }}>
                 Public
               </Typography>
               
-              <Typography style={{ fontSize: 13, padding: 2 }}>
+              <Typography style={{ fontSize: 13, padding: 2, whiteSpace: 'pre-line'  }}>
                 {productInfo.manualsAndCerts.public}
               </Typography>
               
@@ -245,7 +240,7 @@ function App() {
                 Private
               </Typography>
               
-              <Typography style={{ fontSize: 13, padding: 2 }}>
+              <Typography style={{ fontSize: 13, padding: 2, whiteSpace: 'pre-line' }}>
                 {productInfo.manualsAndCerts.private}
               </Typography>
             </Box>
