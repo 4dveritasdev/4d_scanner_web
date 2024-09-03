@@ -152,7 +152,7 @@ function App() {
                 aria-label="basic tabs example"
               >
               <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC' }} label="DPP" {...a11yProps(0)} />
-              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="Warranty/Guarantee" {...a11yProps(1)} />
+              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="W & G" {...a11yProps(1)} />
               <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="Manuals & Certs" {...a11yProps(2)} />
             </Tabs>
           </Box>
