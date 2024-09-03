@@ -194,7 +194,10 @@ function App() {
                 p: 2,
                 m: 1,
                 mt: 0,
-                borderRadius: 5
+                borderRadius: 5,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
               }}>
                 <Typography style={{ fontSize: 15, textAlign: 'center', width: 200 }}>
                   The warranty for this product will expire in:
