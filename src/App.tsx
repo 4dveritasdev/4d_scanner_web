@@ -46,13 +46,12 @@ function App() {
   const [productInfo, setProductInfo] = useState<any>(null);
   const [tabValue, setTabValue] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [cImages, setCImages] = useState([]);
-  const [cVideos, setCVideos] = useState([]);
 
   // @ts-nocheck
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     console.log(event);
     setTabValue(newValue);
+    setCurrentIndex(0);
   };
 
   useEffect(() => {
@@ -82,34 +81,12 @@ function App() {
     }
   }, [qrInfo]);
 
-  useEffect(() => {
-    if (productInfo) {
-      console.log('update tab');
-      if (productInfo) {
-        if (tabValue === 0) {
-          setCImages(productInfo.images);
-          setCVideos(productInfo.videos);
-        } else if (tabValue === 1) {
-          setCImages(productInfo.warrantyAndGuarantee.images);
-          setCVideos(productInfo.warrantyAndGuarantee.videos);
-        } else if (tabValue === 2) {
-          setCImages(productInfo.manualsAndCerts.images);
-          setCVideos(productInfo.manualsAndCerts.videos);
-        }
-      }
-
-    }
-  }, [tabValue, productInfo]);
-
   function a11yProps(index: number) {
     return {
       id: `simple-tab-${index}`,
       'aria-controls': `simple-tabpanel-${index}`,
     };
   }
-
-  console.log(productInfo);
-// qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==
 
   const getYoutubeVideoIDFromUrl = (url: any): any => {
     var videoid = url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
@@ -148,14 +125,14 @@ function App() {
 
         <Typography sx={{ p: 5, pt: 2, fontSize: 24}} >{productInfo.name}</Typography>
 
-        <Box sx={{ position: 'relative' }}>
+        {tabValue === 0 && <Box sx={{ position: 'relative' }}>
           <Slide transitionDuration={100} autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
-            {cImages.map((slideImage: any, index: number) => (
+            {productInfo.images.map((slideImage: any, index: number) => (
               <div key={index}>
                 <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
               </div>
             ))} 
-            {cVideos.map((video: any) => (
+            {productInfo.videos.map((video: any) => (
               <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)} opts={opts} />
             ))}
           </Slide>
@@ -175,12 +152,80 @@ function App() {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <img src={currentIndex < cImages.length ?  CameraIcon : YoutubeIcon} style={{height: 20, width: 20}} />
+            <img src={currentIndex < productInfo.images.length ?  CameraIcon : YoutubeIcon} style={{height: 20, width: 20}} />
             <Typography sx={{color: 'white', fontSize: 13, marginLeft: 1}}>
-              {currentIndex + 1}/{cImages.length + cVideos.length} Medias
+              {currentIndex + 1}/{productInfo.images.length + productInfo.videos.length} Medias
             </Typography>
           </Box>
-        </Box>
+        </Box>}
+        
+        {tabValue === 1 && <Box sx={{ position: 'relative' }}>
+          <Slide transitionDuration={100} autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
+            {productInfo.warrantyAndGuarantee.images.map((slideImage: any, index: number) => (
+              <div key={index}>
+                <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
+              </div>
+            ))} 
+            {productInfo.warrantyAndGuarantee.videos.map((video: any) => (
+              <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)} opts={opts} />
+            ))}
+          </Slide>
+
+          <Box sx={{ 
+              position: 'absolute',
+              bottom: 15,
+              paddingTop: 1,
+              paddingBottom: 1,
+              paddingLeft: 2,
+              paddingRight: 2,
+              right: 10,
+              borderRadius: 20,
+              backgroundColor: '#444',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <img src={currentIndex < productInfo.warrantyAndGuarantee.images.length ?  CameraIcon : YoutubeIcon} style={{height: 20, width: 20}} />
+            <Typography sx={{color: 'white', fontSize: 13, marginLeft: 1}}>
+              {currentIndex + 1}/{productInfo.warrantyAndGuarantee.images.length + productInfo.warrantyAndGuarantee.videos.length} Medias
+            </Typography>
+          </Box>
+        </Box>}
+        
+        {tabValue === 2 && <Box sx={{ position: 'relative' }}>
+          <Slide transitionDuration={100} autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
+            {productInfo.manualsAndCerts.images.map((slideImage: any, index: number) => (
+              <div key={index}>
+                <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
+              </div>
+            ))} 
+            {productInfo.manualsAndCerts.videos.map((video: any) => (
+              <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)} opts={opts} />
+            ))}
+          </Slide>
+
+          <Box sx={{ 
+              position: 'absolute',
+              bottom: 15,
+              paddingTop: 1,
+              paddingBottom: 1,
+              paddingLeft: 2,
+              paddingRight: 2,
+              right: 10,
+              borderRadius: 20,
+              backgroundColor: '#444',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <img src={currentIndex < productInfo.manualsAndCerts.images.length ?  CameraIcon : YoutubeIcon} style={{height: 20, width: 20}} />
+            <Typography sx={{color: 'white', fontSize: 13, marginLeft: 1}}>
+              {currentIndex + 1}/{productInfo.manualsAndCerts.images.length + productInfo.manualsAndCerts.videos.length} Medias
+            </Typography>
+          </Box>
+        </Box>}
 
         <Box sx={{ width: '100%', pt: 3 }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
