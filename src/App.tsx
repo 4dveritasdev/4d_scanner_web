@@ -70,6 +70,9 @@ function App() {
   useEffect(() => {
     if (qrInfo !== '') {
       // alert(qrInfo);
+      if(qrInfo.startsWith('https://parisbrewerytours.com')) {
+        qrInfo.replace('https://parisbrewerytours.com?qrcode=', '');
+      }
       (async () => {
         const data = await getQRInfo(qrInfo);
         setProductInfo(data);
