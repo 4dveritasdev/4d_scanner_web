@@ -71,7 +71,7 @@ function App() {
       // alert(qrInfo);
       (async () => {
         let qrcode = qrInfo;
-        if(qrcode.startsWith('https://parisbrewerytours.com')) {
+        if(qrcode.startsWith('https://4dveritaspublic.com')) {
           qrcode = qrcode.slice(37);
         }
         
@@ -345,7 +345,7 @@ function App() {
         Scan Product
       </Button>}
 
-      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo('https://parisbrewerytours.com?qrcode=qmVQbOYlyQZoXm30fM4npfzU8xhTMtAnlBzDfR1nKNtJFw7XjmOcstx0gViKk6DmSjjEnKErFhWaD19cyGjANA==')}>
+      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo('https://4dveritaspublic.com?qrcode=qmVQbOYlyQZoXm30fM4npfzU8xhTMtAnlBzDfR1nKNtJFw7XjmOcstx0gViKk6DmSjjEnKErFhWaD19cyGjANA==')}>
         Scan Product
       </Button>} */}
       
