@@ -257,7 +257,7 @@ function App() {
                 <Box style={{flex: 1}}>
                   <Typography style={{fontSize: 13, textAlign: 'right'}}>Status : {productInfo.status}</Typography>
                   <Typography style={{fontSize: 13, textAlign: 'right'}}>MPG Date : {productInfo.mpg_time}</Typography>
-                  <Typography style={{fontSize: 13, textAlign: 'right'}}>EXP Date : {productInfo.exp_time}</Typography>
+                  {/* <Typography style={{fontSize: 13, textAlign: 'right'}}>EXP Date : {productInfo.exp_time}</Typography> */}
                 </Box>
               </Box>
               <Box style={{paddingTop: 20, display: 'flex', flexDirection: 'row'}}>
