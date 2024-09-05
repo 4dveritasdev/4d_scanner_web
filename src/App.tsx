@@ -70,11 +70,13 @@ function App() {
   useEffect(() => {
     if (qrInfo !== '') {
       // alert(qrInfo);
-      if(qrInfo.startsWith('https://parisbrewerytours.com')) {
-        qrInfo.replace('https://parisbrewerytours.com?qrcode=', '');
-      }
       (async () => {
-        const data = await getQRInfo(qrInfo);
+        let qrcode = qrInfo;
+        if(qrcode.startsWith('https://parisbrewerytours.com')) {
+          qrcode = qrcode.slice(37);
+        }
+        
+        const data = await getQRInfo(qrcode);
         setProductInfo(data);
       })()
     }
@@ -294,13 +296,13 @@ function App() {
         </Button>}
       </Box>}
       
-      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
-        Scan Product
-      </Button>}
-
-      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npfzU8xhTMtAnlBzDfR1nKNtJFw7XjmOcstx0gViKk6DmSjjEnKErFhWaD19cyGjANA==')}>
+      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
         Scan Product
       </Button>} */}
+
+      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo('https://parisbrewerytours.com?qrcode=qmVQbOYlyQZoXm30fM4npfzU8xhTMtAnlBzDfR1nKNtJFw7XjmOcstx0gViKk6DmSjjEnKErFhWaD19cyGjANA==')}>
+        Scan Product
+      </Button>}
       
       {/* {!openQr && <Button variant="contained" sx={productInfo === null ? { position: 'absolute', bottom: 100 } : {}} onClick={() => setOpenQr(true)}>
         Scan Product
