@@ -2,7 +2,7 @@
 import "./App.css";
 
 // React
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 // Components
 import QrReader from "./components/QrReader";
