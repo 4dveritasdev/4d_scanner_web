@@ -72,7 +72,7 @@ function App() {
       (async () => {
         let qrcode = qrInfo;
         if(qrcode.startsWith('https://4dveritaspublic.com')) {
-          qrcode = qrcode.slice(37);
+          qrcode = qrcode.slice(35);
         }
         
         const data = await getQRInfo(qrcode);
