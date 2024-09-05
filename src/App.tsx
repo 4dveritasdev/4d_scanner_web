@@ -2,7 +2,7 @@
 import "./App.css";
 
 // React
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Components
 import QrReader from "./components/QrReader";
@@ -48,6 +48,7 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cImages, setCImages] = useState([]);
   const [cVideos, setCVideos] = useState([]);
+  const slideRef = useRef(null);
 
   // @ts-nocheck
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -82,6 +83,12 @@ function App() {
     }
   }, [qrInfo]);
 
+  const scrollToFirst = () => {
+    if (slideRef.current) {
+      slideRef.current?.goTo(0);
+    }
+  };
+
   useEffect(() => {
     if (productInfo) {
       console.log('update tab');
@@ -89,12 +96,15 @@ function App() {
         if (tabValue === 0) {
           setCImages(productInfo.images);
           setCVideos(productInfo.videos);
+          scrollToFirst();
         } else if (tabValue === 1) {
           setCImages(productInfo.warrantyAndGuarantee.images);
           setCVideos(productInfo.warrantyAndGuarantee.videos);
+          scrollToFirst();
         } else if (tabValue === 2) {
           setCImages(productInfo.manualsAndCerts.images);
           setCVideos(productInfo.manualsAndCerts.videos);
+          scrollToFirst();
         }
       }
 
@@ -149,7 +159,7 @@ function App() {
         <Typography sx={{ p: 5, pt: 2, fontSize: 24}} >{productInfo.name}</Typography>
 
         <Box sx={{ position: 'relative' }}>
-          <Slide autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
+          <Slide ref={slideRef} transitionDuration={100} autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
             {cImages.map((slideImage: any, index: number) => (
               <div key={index}>
                 <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
@@ -296,13 +306,13 @@ function App() {
         </Button>}
       </Box>}
       
-      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
-        Scan Product
-      </Button>} */}
-
-      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo('https://parisbrewerytours.com?qrcode=qmVQbOYlyQZoXm30fM4npfzU8xhTMtAnlBzDfR1nKNtJFw7XjmOcstx0gViKk6DmSjjEnKErFhWaD19cyGjANA==')}>
+      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
         Scan Product
       </Button>}
+
+      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo('https://parisbrewerytours.com?qrcode=qmVQbOYlyQZoXm30fM4npfzU8xhTMtAnlBzDfR1nKNtJFw7XjmOcstx0gViKk6DmSjjEnKErFhWaD19cyGjANA==')}>
+        Scan Product
+      </Button>} */}
       
       {/* {!openQr && <Button variant="contained" sx={productInfo === null ? { position: 'absolute', bottom: 100 } : {}} onClick={() => setOpenQr(true)}>
         Scan Product
