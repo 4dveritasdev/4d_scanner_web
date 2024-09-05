@@ -40,6 +40,11 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
+// Define the correct type for the Slide component ref
+type SlideRef = {
+  goTo: (index: number) => void;
+};
+
 function App() {
   const [openQr, setOpenQr] = useState<boolean>(false);
   const [qrInfo, setQrInfo] = useState<string>('');
@@ -48,7 +53,7 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cImages, setCImages] = useState([]);
   const [cVideos, setCVideos] = useState([]);
-  const slideRef = useRef(null);
+  const slideRef = useRef<SlideRef>(null);
 
   // @ts-nocheck
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
