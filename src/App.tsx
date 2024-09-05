@@ -291,13 +291,13 @@ function App() {
         </Button>}
       </Box>}
       
-      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
-        Scan Product
-      </Button>} */}
-
-      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npfzU8xhTMtAnlBzDfR1nKNtJFw7XjmOcstx0gViKk6DmSjjEnKErFhWaD19cyGjANA==')}>
+      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
         Scan Product
       </Button>}
+
+      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npfzU8xhTMtAnlBzDfR1nKNtJFw7XjmOcstx0gViKk6DmSjjEnKErFhWaD19cyGjANA==')}>
+        Scan Product
+      </Button>} */}
       
       {/* {!openQr && <Button variant="contained" sx={productInfo === null ? { position: 'absolute', bottom: 100 } : {}} onClick={() => setOpenQr(true)}>
         Scan Product
