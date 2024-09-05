@@ -44,14 +44,28 @@ function App() {
   const [openQr, setOpenQr] = useState<boolean>(false);
   const [qrInfo, setQrInfo] = useState<string>('');
   const [productInfo, setProductInfo] = useState<any>(null);
-  const [value, setValue] = useState(0);
+  const [tabValue, setTabValue] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [cImages, setCImages] = useState([]);
+  const [cVideos, setCVideos] = useState([]);
 
   // @ts-nocheck
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     console.log(event);
-    setValue(newValue);
+    setTabValue(newValue);
   };
+
+  useEffect(() => {
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const params = new URLSearchParams(url.search);
+
+    const qrcode = params.get('qrcode');
+
+    if(qrcode !== null) {
+      setQrInfo(qrcode);
+    }
+  }, []);
 
   useEffect(() => {
     if (qrInfo !== '') {
@@ -62,6 +76,25 @@ function App() {
       })()
     }
   }, [qrInfo]);
+
+  useEffect(() => {
+    if (productInfo) {
+      console.log('update tab');
+      if (productInfo) {
+        if (tabValue === 0) {
+          setCImages(productInfo.images);
+          setCVideos(productInfo.videos);
+        } else if (tabValue === 1) {
+          setCImages(productInfo.warrantyAndGuarantee.images);
+          setCVideos(productInfo.warrantyAndGuarantee.videos);
+        } else if (tabValue === 2) {
+          setCImages(productInfo.manualsAndCerts.images);
+          setCVideos(productInfo.manualsAndCerts.videos);
+        }
+      }
+
+    }
+  }, [tabValue, productInfo]);
 
   function a11yProps(index: number) {
     return {
@@ -112,12 +145,12 @@ function App() {
 
         <Box sx={{ position: 'relative' }}>
           <Slide autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
-            {productInfo.images.map((slideImage: any, index: number) => (
+            {cImages.map((slideImage: any, index: number) => (
               <div key={index}>
                 <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
               </div>
             ))} 
-            {productInfo.videos.map((video: any) => (
+            {cVideos.map((video: any) => (
               <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)} opts={opts} />
             ))}
           </Slide>
@@ -137,9 +170,9 @@ function App() {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <img src={currentIndex < productInfo.images.length ?  CameraIcon : YoutubeIcon} style={{height: 20, width: 20}} />
+            <img src={currentIndex < cImages.length ?  CameraIcon : YoutubeIcon} style={{height: 20, width: 20}} />
             <Typography sx={{color: 'white', fontSize: 13, marginLeft: 1}}>
-              {currentIndex + 1}/{productInfo.images.length + productInfo.videos.length} Medias
+              {currentIndex + 1}/{cImages.length + cVideos.length} Medias
             </Typography>
           </Box>
         </Box>
@@ -147,7 +180,7 @@ function App() {
         <Box sx={{ width: '100%', pt: 3 }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs
-                value={value}
+                value={tabValue}
                 onChange={handleChange}
                 aria-label="basic tabs example"
               >
@@ -156,7 +189,7 @@ function App() {
               <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="Manuals & Certs" {...a11yProps(2)} />
             </Tabs>
           </Box>
-          <CustomTabPanel value={value} index={0}>
+          <CustomTabPanel value={tabValue} index={0}>
             <Box sx={{
               backgroundColor: 'white',
               color: 'black',
@@ -187,7 +220,7 @@ function App() {
               </Box>
             </Box>
           </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
+          <CustomTabPanel value={tabValue} index={1}>
             <Box sx={{
                 backgroundColor: 'white',
                 color: 'black',
@@ -199,28 +232,31 @@ function App() {
                 flexDirection: 'column',
                 alignItems: 'center'
               }}>
-                <Typography style={{ fontSize: 15, textAlign: 'center', width: 200 }}>
+                {!productInfo.warrantyAndGuarantee.warranty.notime && !productInfo.warrantyAndGuarantee.warranty.lifetime && <Typography style={{ fontSize: 15, textAlign: 'center', width: 200 }}>
                   The warranty for this product will expire in:
-                </Typography>
-                <Typography style={{ fontSize: 15, textAlign: 'center', width: 200, paddingTop: 10, color: (CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.warranty.period, productInfo.warrantyAndGuarantee.warranty.unit).duaration < 7 ? 'red' : 'black') }}>
-                  {CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.warranty.period, productInfo.warrantyAndGuarantee.warranty.unit).string}
-                  {/* {productInfo.warrantyAndGuarantee.warranty.period} {productInfo.warrantyAndGuarantee.warranty.unit == 0 ? 'Weeks' : 'Months'} */}
+                </Typography>}
+                <Typography style={{ fontSize: 15, textAlign: 'center', width: 200, paddingTop: 10, color: (!productInfo.warrantyAndGuarantee.warranty.notime && !productInfo.warrantyAndGuarantee.warranty.lifetime && CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.warranty).duaration < 7 ? 'red' : 'black') }}>
+                  
+                  {!productInfo.warrantyAndGuarantee.warranty.notime && !productInfo.warrantyAndGuarantee.warranty.lifetime && CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.warranty).string}
+                  {productInfo.warrantyAndGuarantee.warranty.notime && 'No Warranty'}
+                  {productInfo.warrantyAndGuarantee.warranty.lifetime && 'Lifetime Warranty'}
                 </Typography>
               
-                <Typography style={{ fontSize: 15, textAlign: 'center', width: 220, paddingTop: 20 }}>
+                {!productInfo.warrantyAndGuarantee.guarantee.notime && !productInfo.warrantyAndGuarantee.guarantee.lifetime && <Typography style={{ fontSize: 15, textAlign: 'center', width: 220, paddingTop: 20 }}>
                   The guarantee for this product will expire in:
+                </Typography>}
+                <Typography style={{ fontSize: 15, textAlign: 'center', width: 200, paddingTop: 10, color: (!productInfo.warrantyAndGuarantee.guarantee.notime && !productInfo.warrantyAndGuarantee.guarantee.lifetime && CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.guarantee).duaration < 7 ? 'red' : 'black') }}>
+                  {!productInfo.warrantyAndGuarantee.guarantee.notime && !productInfo.warrantyAndGuarantee.guarantee.lifetime && CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.guarantee).string}
+                  {productInfo.warrantyAndGuarantee.guarantee.notime && 'No Guarantee'}
+                  {productInfo.warrantyAndGuarantee.guarantee.lifetime && 'Lifetime Guarantee'}
                 </Typography>
-                <Typography style={{ fontSize: 15, textAlign: 'center', width: 200, paddingTop: 10, color: (CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.warranty.period, productInfo.warrantyAndGuarantee.warranty.unit).duaration < 7 ? 'red' : 'black') }}>
-                  {CalculateRemainPeriod(productInfo.mpg_time, productInfo.warrantyAndGuarantee.guarantee.period, productInfo.warrantyAndGuarantee.guarantee.unit).string}
-                </Typography>
-
                 
                 <Typography style={{ fontSize: 15, textAlign: 'center', width: 220, paddingTop: 20 }}>
                   Be sure to inspect for and report damage or fault before expiration
                 </Typography>
             </Box>
           </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
+          <CustomTabPanel value={tabValue} index={2}>
             <Box sx={{
               backgroundColor: 'white',
               color: 'black',
@@ -255,13 +291,13 @@ function App() {
         </Button>}
       </Box>}
       
-      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
-        Scan Product
-      </Button>}
-
-      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npVFh1rwiGjGlRHtsNIBiFEC1LJ1wPuE6RFqK7kEKLZe1FniDPpKKFUfvt+tA7Cofrg==')}>
+      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
         Scan Product
       </Button>} */}
+
+      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo('qmVQbOYlyQZoXm30fM4npfzU8xhTMtAnlBzDfR1nKNtJFw7XjmOcstx0gViKk6DmSjjEnKErFhWaD19cyGjANA==')}>
+        Scan Product
+      </Button>}
       
       {/* {!openQr && <Button variant="contained" sx={productInfo === null ? { position: 'absolute', bottom: 100 } : {}} onClick={() => setOpenQr(true)}>
         Scan Product

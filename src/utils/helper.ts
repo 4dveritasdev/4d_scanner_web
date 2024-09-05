@@ -15,7 +15,8 @@ export const getQRInfo = async (data: any) => {
     }
 }
 
-export const CalculateRemainPeriod = (start: string, period: number, unit: number) => {
+export const CalculateRemainPeriod = (start: string, data: any) => {
+    const {period, unit} = data;
     console.log(start, period, unit);
     let startDate = new Date(start.replaceAll('.', '-'));
     console.log(startDate);
