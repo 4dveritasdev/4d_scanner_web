@@ -40,11 +40,6 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
-// Define the correct type for the Slide component ref
-type SlideRef = {
-  goTo: (index: number) => void;
-};
-
 function App() {
   const [openQr, setOpenQr] = useState<boolean>(false);
   const [qrInfo, setQrInfo] = useState<string>('');
@@ -53,7 +48,6 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cImages, setCImages] = useState([]);
   const [cVideos, setCVideos] = useState([]);
-  const slideRef = useRef<SlideRef>(null);
 
   // @ts-nocheck
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -88,12 +82,6 @@ function App() {
     }
   }, [qrInfo]);
 
-  const scrollToFirst = () => {
-    if (slideRef.current) {
-      slideRef.current?.goTo(0);
-    }
-  };
-
   useEffect(() => {
     if (productInfo) {
       console.log('update tab');
@@ -101,15 +89,12 @@ function App() {
         if (tabValue === 0) {
           setCImages(productInfo.images);
           setCVideos(productInfo.videos);
-          scrollToFirst();
         } else if (tabValue === 1) {
           setCImages(productInfo.warrantyAndGuarantee.images);
           setCVideos(productInfo.warrantyAndGuarantee.videos);
-          scrollToFirst();
         } else if (tabValue === 2) {
           setCImages(productInfo.manualsAndCerts.images);
           setCVideos(productInfo.manualsAndCerts.videos);
-          scrollToFirst();
         }
       }
 
@@ -164,7 +149,7 @@ function App() {
         <Typography sx={{ p: 5, pt: 2, fontSize: 24}} >{productInfo.name}</Typography>
 
         <Box sx={{ position: 'relative' }}>
-          <Slide ref={slideRef} transitionDuration={100} autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
+          <Slide transitionDuration={100} autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
             {cImages.map((slideImage: any, index: number) => (
               <div key={index}>
                 <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
