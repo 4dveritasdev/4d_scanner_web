@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 // Components
 import QrReader from "./components/QrReader";
 import { CalculateRemainPeriod, getQRInfo } from "./utils/helper";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Modal, Typography } from "@mui/material";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Slide } from 'react-slideshow-image';
@@ -17,12 +17,29 @@ import CameraIcon from './assets/camera_icon.png';
 import YoutubeIcon from './assets/youtube-icon.png';
 import Background from './assets/bg.jpg';
 import BackButton from './assets/back.png';
+import PDFIcon from './assets/pdf.png';
+import { Worker, Viewer } from '@react-pdf-viewer/core';
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+
 
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
 }
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  width: '90%',
+  height: '80vh'
+};
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
@@ -46,6 +63,8 @@ function App() {
   const [productInfo, setProductInfo] = useState<any>(null);
   const [tabValue, setTabValue] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [viewPDF, setViewPDF] = useState(false);
+  const [currentPDF, setCurrentPDF] = useState(null);
 
   // @ts-nocheck
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -117,6 +136,19 @@ function App() {
       }}>
       {!openQr && productInfo !== null && <Box sx={{ backgroundColor: 'black', color: 'white', minHeight: window.innerHeight}}>
         
+        <Modal
+          open={viewPDF}
+          onClose={() => setViewPDF(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={modalStyle}>
+            <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}>
+              <Viewer fileUrl={'https://shearnode.com/api/v1/files/' + currentPDF} />
+            </Worker>
+          </Box>
+        </Modal>
+
         <Box sx={{ textAlign: 'left'}}>
           <Button onClick={() => {setProductInfo(null), setQrInfo('')}} sx={{minWidth: 36, mt: 1}}>
             <img src={BackButton} style={{height: 36, width: 36}} />
@@ -268,6 +300,14 @@ function App() {
                   <img src={productInfo.qrcode_img} style={{width: 100, height: 100}} />
                 </Box>
               </Box>
+                    
+              <Box style={{ display: 'flex', flexDirection: 'row'}}>
+                {productInfo.warrantyAndGuarantee.files.map((file: any, i: number) => (
+                  <Button key={i} onClick={() => {console.log(file), setViewPDF(true), setCurrentPDF(file)}} style={{ padding: 2 }}>
+                    <img src={PDFIcon} style={{height: 28, width: 28}} />
+                  </Button>
+                ))}
+              </Box>
             </Box>
           </CustomTabPanel>
           <CustomTabPanel value={tabValue} index={1}>
@@ -345,7 +385,7 @@ function App() {
         Scan Product
       </Button>}
 
-      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo('https://4dveritaspublic.com?qrcode=qmVQbOYlyQZoXm30fM4npfzU8xhTMtAnlBzDfR1nKNtJFw7XjmOcstx0gViKk6DmSjjEnKErFhWaD19cyGjANA==')}>
+      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo("https://4dveritaspublic.com?qrcode=qmVQbOYlyQZoXm30fM4npbL9nZEh89ZsbuyBGGlnXWjXXRAyN6Z9hsbZ7dQBp4dGRB4RP6N+VLxn2HYJXwUAfQ==")}>
         Scan Product
       </Button>} */}
       
