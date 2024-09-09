@@ -31,14 +31,13 @@ interface TabPanelProps {
 
 const modalStyle = {
   position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  bottom: 0,
+  left: 0,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  width: '90%',
-  height: '80vh'
+  width: '100%',
+  height: '85vh'
 };
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -302,7 +301,7 @@ function App() {
               </Box>
                     
               <Box style={{ display: 'flex', flexDirection: 'row'}}>
-                {productInfo.warrantyAndGuarantee.files.map((file: any, i: number) => (
+                {productInfo.files.map((file: any, i: number) => (
                   <Button key={i} onClick={() => {console.log(file), setViewPDF(true), setCurrentPDF(file)}} style={{ padding: 2 }}>
                     <img src={PDFIcon} style={{height: 28, width: 28}} />
                   </Button>
@@ -344,6 +343,14 @@ function App() {
                 <Typography style={{ fontSize: 15, textAlign: 'center', width: 220, paddingTop: 20 }}>
                   Be sure to inspect for and report damage or fault before expiration
                 </Typography>
+                    
+                <Box style={{ display: 'flex', flexDirection: 'row'}}>
+                  {productInfo.warrantyAndGuarantee.files.map((file: any, i: number) => (
+                    <Button key={i} onClick={() => {console.log(file), setViewPDF(true), setCurrentPDF(file)}} style={{ padding: 2 }}>
+                      <img src={PDFIcon} style={{height: 28, width: 28}} />
+                    </Button>
+                  ))}
+                </Box>
             </Box>
           </CustomTabPanel>
           <CustomTabPanel value={tabValue} index={2}>
@@ -372,6 +379,14 @@ function App() {
               <Typography style={{ fontSize: 13, padding: 2, whiteSpace: 'pre-line' }}>
                 {productInfo.manualsAndCerts.private}
               </Typography>
+                    
+              <Box style={{ display: 'flex', flexDirection: 'row'}}>
+                {productInfo.manualsAndCerts.files.map((file: any, i: number) => (
+                  <Button key={i} onClick={() => {console.log(file), setViewPDF(true), setCurrentPDF(file)}} style={{ padding: 2 }}>
+                    <img src={PDFIcon} style={{height: 28, width: 28}} />
+                  </Button>
+                ))}
+              </Box>
             </Box>
           </CustomTabPanel>
         </Box>
