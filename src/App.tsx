@@ -77,7 +77,8 @@ function App() {
     const url = new URL(currentUrl);
     const params = new URLSearchParams(url.search);
 
-    const qrcode = params.get('qrcode');
+    let qrcode: any = params.get('qrcode');
+    qrcode = qrcode?.replace(' ', '+');
 
     if(qrcode !== null) {
       setQrInfo(qrcode);
@@ -400,7 +401,7 @@ function App() {
         Scan Product
       </Button>}
 
-      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo("https://4dveritaspublic.com?qrcode=qmVQbOYlyQZoXm30fM4npbL9nZEh89ZsbuyBGGlnXWjXXRAyN6Z9hsbZ7dQBp4dGRB4RP6N+VLxn2HYJXwUAfQ==")}>
+      {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo("https://4dveritaspublic.com?qrcode=qmVQbOYlyQZoXm30fM4npaMzIRbMaG0x74oeaRpQLyyAGbpcXD8QC+WVMuKNJD4QWfsLYcs54jecr29mFrJBow==")}>
         Scan Product
       </Button>} */}
       
