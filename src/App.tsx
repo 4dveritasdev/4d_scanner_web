@@ -289,6 +289,7 @@ function App() {
                 <Box style={{flex: 1}}>
                   <Typography style={{fontSize: 13, textAlign: 'right'}}>Status : {productInfo.status}</Typography>
                   <Typography style={{fontSize: 13, textAlign: 'right'}}>MPG Date : {productInfo.mpg_time}</Typography>
+                  <Typography style={{fontSize: 13, textAlign: 'right'}}>Location : {productInfo.location}</Typography>
                   {/* <Typography style={{fontSize: 13, textAlign: 'right'}}>EXP Date : {productInfo.exp_time}</Typography> */}
                 </Box>
               </Box>
