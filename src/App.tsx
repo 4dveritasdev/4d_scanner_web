@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 
 // Components
 import QrReader from "./components/QrReader";
-import { CalculateRemainPeriod, getQRInfo } from "./utils/helper";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { CalculateRemainPeriod, getIdentifierInfo, getQRInfo } from "./utils/helper";
+import { Box, Button, MenuItem, Modal, TextField, Typography,Select } from "@mui/material";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Slide } from 'react-slideshow-image';
@@ -64,6 +64,8 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [viewPDF, setViewPDF] = useState(false);
   const [currentPDF, setCurrentPDF] = useState(null);
+  const [identifiers,setIdentifiers] = useState({type:'serial',serial:''})
+  const [openIdentifer,setOpenIdentifer] = useState(false)
 
   // @ts-nocheck
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -99,6 +101,12 @@ function App() {
       })()
     }
   }, [qrInfo]);
+  
+  const getProduct = async() => {
+    const data = await getIdentifierInfo(identifiers);
+    setProductInfo(data);
+  }
+ 
 
   function a11yProps(index: number) {
     return {
@@ -290,6 +298,11 @@ function App() {
                   <Typography style={{fontSize: 13, textAlign: 'right'}}>Status : {productInfo.status}</Typography>
                   <Typography style={{fontSize: 13, textAlign: 'right'}}>MPG Date : {productInfo.mpg_time}</Typography>
                   <Typography style={{fontSize: 13, textAlign: 'right'}}>Location : {productInfo.location}</Typography>
+                  {
+                      productInfo.serialInfos && productInfo.serialInfos.map((item:any)=>(
+                        <Typography style={{fontSize: 13, textAlign: 'right'}}>{item.type.toUpperCase()} : {item.serial}</Typography>
+                      ))
+                    }
                   {/* <Typography style={{fontSize: 13, textAlign: 'right'}}>EXP Date : {productInfo.exp_time}</Typography> */}
                 </Box>
               </Box>
@@ -398,9 +411,33 @@ function App() {
         </Button>}
       </Box>}
       
-      {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
-        Scan Product
-      </Button>}
+      <div style={{position:'absolute',minWidth:'40%',left:'30%',bottom:300}}>
+          {!openQr && productInfo === null && <Button variant="outlined" sx={{ minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
+            Scan Product
+          </Button>}
+          {
+            productInfo === null && <Button variant="outlined" sx={{ minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(false), setProductInfo(null), setQrInfo(''), setOpenIdentifer(true), setIdentifiers({type:'serial',serial:''})}}>Scan Product With Identifier</Button>
+          }
+
+          {
+            openIdentifer && (
+              <div style={{background:'white',padding:25}}>
+                <div style={{marginTop:25}}>
+                  <Select label="Type" value={identifiers.type}>
+                    <MenuItem value="serial">Serial Number</MenuItem>
+                  </Select>
+                </div>
+                <div  style={{marginTop:25}}>
+                  <TextField id="" label="Identiier" value={identifiers.serial} onChange={e=>setIdentifiers({...identifiers,serial:e.target.value})} />
+                </div>
+
+                <Button variant="contained" sx={{ minWidth: '40%', color: 'white', borderColor: 'white',marginTop:5}} onClick={() => {getProduct(); setOpenIdentifer(false); setIdentifiers({type:'serial',serial:''})}}>Scan Product</Button>
+
+              </div>
+            )
+          }
+      </div>
+      
 
       {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo("https://4dveritaspublic.com?qrcode=qmVQbOYlyQZoXm30fM4npaMzIRbMaG0x74oeaRpQLyyAGbpcXD8QC+WVMuKNJD4QWfsLYcs54jecr29mFrJBow==")}>
         Scan Product

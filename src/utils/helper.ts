@@ -15,6 +15,16 @@ export const getQRInfo = async (data: any) => {
     }
 }
 
+export const getIdentifierInfo = async (data: any) => {
+    try {
+        const res = await axios.post(`${API_URL}qrcode/serialdata/productinfo`, { data } );
+        return res.data.data;
+    } catch (err) {
+        console.log('error', err);
+        return null;
+    }
+}
+
 export const CalculateRemainPeriod = (start: string, data: any) => {
     const {period, unit} = data;
     console.log(start, period, unit);
