@@ -407,28 +407,28 @@ function App() {
         </Box>
         
         {!openQr && <Button variant="outlined" sx={{minWidth: '40%', color: 'white', borderColor: 'white', m: 2}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
-          Scan Product
+          Scan Product With QR Code
         </Button>}
       </Box>}
       
-      <div style={{position:'absolute',minWidth:'40%',left:'30%',bottom:300}}>
-          {!openQr && productInfo === null && <Button variant="outlined" sx={{ minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
-            Scan Product
+      <div style={{position:'absolute',minWidth:'40%',bottom:50}}>
+          {!openQr && productInfo === null && <Button variant="outlined" sx={{ minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setOpenIdentifer(false), setProductInfo(null), setQrInfo('')}}>
+            Scan Product With QR Code
           </Button>}
           {
-            productInfo === null && <Button variant="outlined" sx={{ minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(false), setProductInfo(null), setQrInfo(''), setOpenIdentifer(true), setIdentifiers({type:'serial',serial:''})}}>Scan Product With Identifier</Button>
+            productInfo === null && <Button variant="outlined" sx={{ minWidth: '40%', color: 'white',marginTop:'25px', borderColor: 'white'}} onClick={() => {setOpenQr(false), setProductInfo(null), setQrInfo(''), setOpenIdentifer(true), setIdentifiers({type:'serial',serial:''})}}>Scan Product With Other Identifier</Button>
           }
 
           {
             openIdentifer && (
-              <div style={{background:'white',padding:25}}>
+              <div style={{background:'white',padding:25,marginTop:'10px'}}>
                 <div style={{marginTop:25}}>
                   <Select label="Type" value={identifiers.type}>
                     <MenuItem value="serial">Serial Number</MenuItem>
                   </Select>
                 </div>
                 <div  style={{marginTop:25}}>
-                  <TextField id="" label="Identiier" value={identifiers.serial} onChange={e=>setIdentifiers({...identifiers,serial:e.target.value})} />
+                  <TextField id="" label="Identifier" value={identifiers.serial} onChange={e=>setIdentifiers({...identifiers,serial:e.target.value})} />
                 </div>
 
                 <Button variant="contained" sx={{ minWidth: '40%', color: 'white', borderColor: 'white',marginTop:5}} onClick={() => {getProduct(); setOpenIdentifer(false); setIdentifiers({type:'serial',serial:''})}}>Scan Product</Button>
