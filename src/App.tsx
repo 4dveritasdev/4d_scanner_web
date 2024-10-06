@@ -275,8 +275,8 @@ function App() {
                 aria-label="basic tabs example"
               >
               <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC' }} label="DPP" {...a11yProps(0)} />
-              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="W & G" {...a11yProps(1)} />
-              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="Manuals & Certs" {...a11yProps(2)} />
+              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="TimeCapsule" {...a11yProps(1)} />
+              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="Trade History" {...a11yProps(2)} />
             </Tabs>
           </Box>
           <CustomTabPanel value={tabValue} index={0}>
@@ -336,6 +336,7 @@ function App() {
                 flexDirection: 'column',
                 alignItems: 'center'
               }}>
+                <h4>W & G</h4>
                 {!productInfo.warrantyAndGuarantee.warranty.notime && !productInfo.warrantyAndGuarantee.warranty.lifetime && <Typography style={{ fontSize: 15, textAlign: 'center', width: 200 }}>
                   The warranty for this product will expire in:
                 </Typography>}
@@ -366,43 +367,33 @@ function App() {
                     </Button>
                   ))}
                 </Box>
+                <h4>Manuals&Certs</h4>
+                <Typography style={{ fontSize: 15, fontWeight: 'bold' }}>
+                  Public
+                </Typography>
+                
+                <Typography style={{ fontSize: 13, padding: 2, whiteSpace: 'pre-line'  }}>
+                  {productInfo.manualsAndCerts.public}
+                </Typography>
+                
+                <Typography style={{ fontSize: 15, fontWeight: 'bold' }}>
+                  Private
+                </Typography>
+                
+                <Typography style={{ fontSize: 13, padding: 2, whiteSpace: 'pre-line' }}>
+                  {productInfo.manualsAndCerts.private}
+                </Typography>
+                      
+                <Box style={{ display: 'flex', flexDirection: 'row'}}>
+                  {productInfo.manualsAndCerts.files.map((file: any, i: number) => (
+                    <Button key={i} onClick={() => {console.log(file), setViewPDF(true), setCurrentPDF(file)}} style={{ padding: 2 }}>
+                      <img src={PDFIcon} style={{height: 28, width: 28}} />
+                    </Button>
+                  ))}
+                </Box>
             </Box>
           </CustomTabPanel>
           <CustomTabPanel value={tabValue} index={2}>
-            <Box sx={{
-              backgroundColor: 'white',
-              color: 'black',
-              p: 2,
-              m: 1,
-              mt: 0,
-              borderRadius: 5,
-              textAlign: 'left'
-            }}>
-              
-              <Typography style={{ fontSize: 15, fontWeight: 'bold' }}>
-                Public
-              </Typography>
-              
-              <Typography style={{ fontSize: 13, padding: 2, whiteSpace: 'pre-line'  }}>
-                {productInfo.manualsAndCerts.public}
-              </Typography>
-              
-              <Typography style={{ fontSize: 15, fontWeight: 'bold' }}>
-                Private
-              </Typography>
-              
-              <Typography style={{ fontSize: 13, padding: 2, whiteSpace: 'pre-line' }}>
-                {productInfo.manualsAndCerts.private}
-              </Typography>
-                    
-              <Box style={{ display: 'flex', flexDirection: 'row'}}>
-                {productInfo.manualsAndCerts.files.map((file: any, i: number) => (
-                  <Button key={i} onClick={() => {console.log(file), setViewPDF(true), setCurrentPDF(file)}} style={{ padding: 2 }}>
-                    <img src={PDFIcon} style={{height: 28, width: 28}} />
-                  </Button>
-                ))}
-              </Box>
-            </Box>
           </CustomTabPanel>
         </Box>
         
@@ -418,8 +409,8 @@ function App() {
           {
             productInfo === null && <Button variant="outlined" sx={{ minWidth: '40%', color: 'white',marginTop:'25px', borderColor: 'white'}} onClick={() => {setOpenQr(false), setProductInfo(null), setQrInfo(''), setOpenIdentifer(true), setIdentifiers({type:'serial',serial:''})}}>Scan Product With Other Identifier</Button>
           }
-
-          {
+      </div>
+      {
             openIdentifer && (
               <div style={{background:'white',padding:25,marginTop:'10px'}}>
                 <div style={{marginTop:25}}>
@@ -436,8 +427,6 @@ function App() {
               </div>
             )
           }
-      </div>
-      
 
       {/* {!openQr && productInfo === null && <Button variant="outlined" sx={{position: 'absolute', bottom: 100, left: '30%', minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => setQrInfo("https://4dveritaspublic.com?qrcode=qmVQbOYlyQZoXm30fM4npaMzIRbMaG0x74oeaRpQLyyAGbpcXD8QC+WVMuKNJD4QWfsLYcs54jecr29mFrJBow==")}>
         Scan Product
