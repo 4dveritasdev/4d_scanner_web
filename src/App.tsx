@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 // Components
 import QrReader from "./components/QrReader";
 import { CalculateRemainPeriod, getIdentifierInfo, getQRInfo } from "./utils/helper";
-import { Box, Button, MenuItem, Modal, TextField, Typography,Select } from "@mui/material";
+import { Box, Button, MenuItem, Modal, TextField, Typography,Select, FormControl, InputLabel } from "@mui/material";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Slide } from 'react-slideshow-image';
@@ -200,71 +200,57 @@ function App() {
         </Box>}
         
         {tabValue === 1 && <Box sx={{ position: 'relative' }}>
-          <Slide transitionDuration={100} autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
-            {productInfo.warrantyAndGuarantee.images.map((slideImage: any, index: number) => (
-              <div key={index}>
-                <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
-              </div>
-            ))} 
-            {productInfo.warrantyAndGuarantee.videos.map((video: any) => (
-              <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)} opts={opts} />
-            ))}
-          </Slide>
+          {
+            productInfo.warrantyAndGuarantee.images.length + productInfo.warrantyAndGuarantee.videos.length + productInfo.manualsAndCerts.images.length + productInfo.manualsAndCerts.videos.length > 0 && (
+              <>
+                   <Slide transitionDuration={100} autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
+                    {productInfo.warrantyAndGuarantee.images.map((slideImage: any, index: number) => (
+                      <div key={index}>
+                        <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
+                      </div>
+                    ))} 
+                     {productInfo.manualsAndCerts.images.map((slideImage: any, index: number) => (
+                      <div key={index}>
+                        <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
+                      </div>
+                    ))} 
+                    {productInfo.warrantyAndGuarantee.videos.map((video: any) => (
+                      <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)} opts={opts} />
+                    ))}
+                    {productInfo.manualsAndCerts.videos.map((video: any) => (
+                      <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)} opts={opts} />
+                    ))}
+                  </Slide>
 
-          <Box sx={{ 
-              position: 'absolute',
-              bottom: 15,
-              paddingTop: 1,
-              paddingBottom: 1,
-              paddingLeft: 2,
-              paddingRight: 2,
-              right: 10,
-              borderRadius: 20,
-              backgroundColor: '#444',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <img src={currentIndex < productInfo.warrantyAndGuarantee.images.length ?  CameraIcon : YoutubeIcon} style={{height: 20, width: 20}} />
-            <Typography sx={{color: 'white', fontSize: 13, marginLeft: 1}}>
-              {currentIndex + 1}/{productInfo.warrantyAndGuarantee.images.length + productInfo.warrantyAndGuarantee.videos.length} Medias
-            </Typography>
-          </Box>
+                  <Box sx={{ 
+                      position: 'absolute',
+                      bottom: 15,
+                      paddingTop: 1,
+                      paddingBottom: 1,
+                      paddingLeft: 2,
+                      paddingRight: 2,
+                      right: 10,
+                      borderRadius: 20,
+                      backgroundColor: '#444',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <img src={currentIndex < productInfo.warrantyAndGuarantee.images.length + productInfo.manualsAndCerts.images.length ?  CameraIcon : YoutubeIcon} style={{height: 20, width: 20}} />
+                    <Typography sx={{color: 'white', fontSize: 13, marginLeft: 1}}>
+                      {currentIndex + 1}/{productInfo.warrantyAndGuarantee.images.length + productInfo.warrantyAndGuarantee.videos.length + productInfo.manualsAndCerts.images.length + productInfo.manualsAndCerts.videos.length} Medias
+                    </Typography>
+                  </Box>
+              
+              </>
+            )
+          }
+         
         </Box>}
         
         {tabValue === 2 && <Box sx={{ position: 'relative' }}>
-          <Slide transitionDuration={100} autoplay={false} onChange={(previous, next) => { console.log(previous), setCurrentIndex(next) }}>
-            {productInfo.manualsAndCerts.images.map((slideImage: any, index: number) => (
-              <div key={index}>
-                <img src={'https://shearnode.com/api/v1/files/' + slideImage} height={window.innerWidth * 0.7} />
-              </div>
-            ))} 
-            {productInfo.manualsAndCerts.videos.map((video: any) => (
-              <YouTube videoId={getYoutubeVideoIDFromUrl(video.url)} opts={opts} />
-            ))}
-          </Slide>
-
-          <Box sx={{ 
-              position: 'absolute',
-              bottom: 15,
-              paddingTop: 1,
-              paddingBottom: 1,
-              paddingLeft: 2,
-              paddingRight: 2,
-              right: 10,
-              borderRadius: 20,
-              backgroundColor: '#444',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <img src={currentIndex < productInfo.manualsAndCerts.images.length ?  CameraIcon : YoutubeIcon} style={{height: 20, width: 20}} />
-            <Typography sx={{color: 'white', fontSize: 13, marginLeft: 1}}>
-              {currentIndex + 1}/{productInfo.manualsAndCerts.images.length + productInfo.manualsAndCerts.videos.length} Medias
-            </Typography>
-          </Box>
+          
         </Box>}
 
         <Box sx={{ width: '100%', pt: 3 }}>
@@ -275,7 +261,7 @@ function App() {
                 aria-label="basic tabs example"
               >
               <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC' }} label="DPP" {...a11yProps(0)} />
-              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="TimeCapsule" {...a11yProps(1)} />
+              <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="Time Capsule" {...a11yProps(1)} />
               <Tab sx={{ fontSize: 13, fontWeight: 'bold', minWidth: 48, color: '#CCC'}} label="Trade History" {...a11yProps(2)} />
             </Tabs>
           </Box>
@@ -396,34 +382,50 @@ function App() {
           <CustomTabPanel value={tabValue} index={2}>
           </CustomTabPanel>
         </Box>
-        
-        {!openQr && <Button variant="outlined" sx={{minWidth: '40%', color: 'white', borderColor: 'white', m: 2}} onClick={() => {setOpenQr(true), setProductInfo(null), setQrInfo('')}}>
+        <div>
+        {!openQr && <Button variant="outlined" sx={{minWidth: '40%', color: 'white', borderColor: 'white', m: 2}} onClick={() => {setOpenQr(true), setProductInfo(null), setOpenIdentifer(false), setQrInfo('')}}>
           Scan Product With QR Code
         </Button>}
+        </div>
+        <div>
+        {
+          !openIdentifer && (
+            <Button variant="outlined" sx={{ minWidth: '40%', color: 'white',marginTop:'25px', borderColor: 'white'}} onClick={() => {setOpenQr(false), setProductInfo(null), setQrInfo(''), setOpenIdentifer(true), setIdentifiers({type:'serial',serial:''})}}>Scan Product With Other Identifier</Button>
+          )
+        }
+        </div>
       </Box>}
       
-      <div style={{position:'absolute',minWidth:'40%',bottom:50}}>
+      <div style={{position:'absolute',minWidth:'100%',bottom:50,display:'flex',flexDirection:'column',alignItems:'center'}}>
+          <div>
           {!openQr && productInfo === null && <Button variant="outlined" sx={{ minWidth: '40%', color: 'white', borderColor: 'white'}} onClick={() => {setOpenQr(true), setOpenIdentifer(false), setProductInfo(null), setQrInfo('')}}>
             Scan Product With QR Code
           </Button>}
+          </div>
+          <div>
           {
-            productInfo === null && <Button variant="outlined" sx={{ minWidth: '40%', color: 'white',marginTop:'25px', borderColor: 'white'}} onClick={() => {setOpenQr(false), setProductInfo(null), setQrInfo(''), setOpenIdentifer(true), setIdentifiers({type:'serial',serial:''})}}>Scan Product With Other Identifier</Button>
+            (productInfo === null && !openIdentifer) && <Button variant="outlined" sx={{ minWidth: '40%', color: 'white',marginTop:'25px', borderColor: 'white'}} onClick={() => {setOpenQr(false), setProductInfo(null), setQrInfo(''), setOpenIdentifer(true), setIdentifiers({type:'serial',serial:''})}}>Scan Product With Other Identifier</Button>
           }
+          </div>
       </div>
       {
             openIdentifer && (
               <div style={{background:'white',padding:25,marginTop:'10px'}}>
-                <div style={{marginTop:25}}>
-                  <Select label="Type" value={identifiers.type}>
+                <FormControl  style={{marginTop:25}}>
+                  <InputLabel id="serial-type-label">Type</InputLabel>
+                  <Select labelId="serial-type-label" label="Type" value={identifiers.type}>
                     <MenuItem value="serial">Serial Number</MenuItem>
                   </Select>
-                </div>
+                </FormControl>
                 <div  style={{marginTop:25}}>
                   <TextField id="" label="Identifier" value={identifiers.serial} onChange={e=>setIdentifiers({...identifiers,serial:e.target.value})} />
                 </div>
-
+                <div>
                 <Button variant="contained" sx={{ minWidth: '40%', color: 'white', borderColor: 'white',marginTop:5}} onClick={() => {getProduct(); setOpenIdentifer(false); setIdentifiers({type:'serial',serial:''})}}>Scan Product</Button>
-
+                </div>
+                <div>
+                <Button variant="contained" sx={{ minWidth: '40%', color: 'white', borderColor: 'white',marginTop:5}} onClick={() => {setOpenIdentifer(false); setIdentifiers({type:'serial',serial:''})}}>Cancel</Button>
+                </div>
               </div>
             )
           }
