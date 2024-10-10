@@ -25,6 +25,16 @@ export const getIdentifierInfo = async (data: any) => {
     }
 }
 
+export const getTransactions = async(id:string,token_id:string) => {
+    try {
+        const res = await axios.get(`${API_URL}product/transactions/${id}/${token_id}` );
+        return res.data.data;
+    } catch (err) {
+        console.log('error', err);
+        return [];
+    }
+}
+
 export const CalculateRemainPeriod = (start: string, data: any) => {
     const {period, unit} = data;
     console.log(start, period, unit);

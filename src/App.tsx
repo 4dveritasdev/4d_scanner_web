@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 
 // Components
 import QrReader from "./components/QrReader";
-import { CalculateRemainPeriod, getIdentifierInfo, getQRInfo } from "./utils/helper";
-import { Box, Button, MenuItem, Modal, TextField, Typography,Select, FormControl, InputLabel } from "@mui/material";
+import { CalculateRemainPeriod, getIdentifierInfo, getQRInfo, getTransactions } from "./utils/helper";
+import { Box, Button, MenuItem, Modal, TextField, Typography,Select, FormControl, InputLabel,Dialog,DialogTitle,DialogContent, Grid2 as Grid, styled, IconButton } from "@mui/material";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Slide } from 'react-slideshow-image';
@@ -56,6 +56,16 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+}));
+
+
 function App() {
   const [openQr, setOpenQr] = useState<boolean>(false);
   const [qrInfo, setQrInfo] = useState<string>('');
@@ -66,6 +76,8 @@ function App() {
   const [currentPDF, setCurrentPDF] = useState(null);
   const [identifiers,setIdentifiers] = useState({type:'serial',serial:''})
   const [openIdentifer,setOpenIdentifer] = useState(false)
+  const [transactions,setTransactions] = useState<any[]>([])
+  const [selectedTransaction,setSelectedTransaction] = useState<any>(undefined)
 
   // @ts-nocheck
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -106,6 +118,14 @@ function App() {
     const data = await getIdentifierInfo(identifiers);
     setProductInfo(data);
   }
+
+  useEffect(()=>{
+    if(productInfo) {
+      getTransactions(productInfo._id,productInfo.token_id).then(result=>{
+        setTransactions(result)
+      })
+    }
+  },[productInfo])
  
 
   function a11yProps(index: number) {
@@ -380,6 +400,41 @@ function App() {
             </Box>
           </CustomTabPanel>
           <CustomTabPanel value={tabValue} index={2}>
+            <Box sx={{
+                backgroundColor: 'white',
+                color: 'black',
+                p: 2,
+                m: 1,
+                mt: 0,
+                borderRadius: 5,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}>
+
+                {
+                  transactions.length == 0 ? (
+                    <Box style={{ display: 'flex', flexDirection: 'row',alignItems:'center'}}>
+                      <div>{`Registered By ${productInfo.company?.name}`}</div>
+                      <div style={{marginLeft:20}}><Button variant="outlined" onClick={()=>setSelectedTransaction({company:productInfo.company})}>Detail</Button></div>
+                    </Box>
+                  ):(
+                    <Box style={{ display: 'flex', flexDirection: 'row',alignItems:'center'}}>
+                      <div>{`Registered By ${transactions[transactions.length - 1].fromCompany?.name}`}</div>
+                      <div style={{marginLeft:20}}><Button variant="outlined" onClick={()=>setSelectedTransaction({company:transactions[0].fromCompany})}>Detail</Button></div>
+                    </Box>
+                  )
+                }
+              
+            {
+              transactions.map((transaction:any)=>(
+                <Box style={{ display: 'flex', flexDirection: 'row',alignItems:'center',marginTop:5}}>
+                  <div>{`Transfered to ${transaction.company?.name}`}</div>
+                  <div style={{marginLeft:20}}><Button variant="outlined" onClick={()=>setSelectedTransaction({company:transaction.company,txid:transaction.parentTxId})}>Detail</Button></div>
+                </Box>
+              ))
+            }
+            </Box>
           </CustomTabPanel>
         </Box>
         <div>
@@ -439,6 +494,43 @@ function App() {
       </Button>} */}
 
       {openQr && productInfo === null && <QrReader setOpenQr={setOpenQr} setQrInfo={setQrInfo}/>}
+
+      <BootstrapDialog  open={selectedTransaction !== undefined} onClose={()=>setSelectedTransaction(undefined)}>
+        <DialogTitle  sx={{ m: 0, p: 2 }} id="customized-dialog-title">Detail</DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={()=>setSelectedTransaction(undefined)}
+          sx={(theme) => ({
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: theme.palette.grey[500],
+          })}
+        >
+          X
+        </IconButton>
+        <DialogContent dividers>
+          <Grid container spacing={2}>
+            <Grid size={12}>
+              Name: {selectedTransaction?.company?.name}
+            </Grid>
+            <Grid size={12}>
+              Email: {selectedTransaction?.company?.email}
+            </Grid>
+            <Grid size={12}>
+              Location: {selectedTransaction?.company?.location}
+            </Grid>
+            {
+              selectedTransaction?.txid && (
+                <Grid size={12}>
+                <a href={`https://browser.testnet.partisiablockchain.com/transactions/${selectedTransaction.txid}`} target="_blank">Blockchain Network Link</a>
+              </Grid>
+              )
+            }
+            
+          </Grid>
+        </DialogContent>
+      </BootstrapDialog>
     </Box>
   );
 }
